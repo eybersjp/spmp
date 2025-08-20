@@ -8,7 +8,14 @@ import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/Projects";
 import Clients from "./pages/Clients";
 import SystemDesigner from "./pages/SystemDesigner";
-import PlaceholderPage from "./pages/PlaceholderPage";
+import EnergyAnalysis from "./pages/EnergyAnalysis";
+import FinancialAnalysis from "./pages/FinancialAnalysis";
+import ReportsAnalytics from "./pages/ReportsAnalytics";
+import DocumentManagement from "./pages/DocumentManagement";
+import FieldOperations from "./pages/FieldOperations";
+import Notifications from "./pages/Notifications";
+import SafetyCompliance from "./pages/SafetyCompliance";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import { 
   BarChart3, 
@@ -37,90 +44,18 @@ const App = () => (
             <Route path="/designer" element={<SystemDesigner />} />
             
             {/* Analysis Routes */}
-            <Route 
-              path="/energy" 
-              element={
-                <PlaceholderPage 
-                  title="Energy Analysis" 
-                  description="Simulate production vs. consumption, savings, ROI, and payback period"
-                  icon={BarChart3}
-                />
-              } 
-            />
-            <Route 
-              path="/financial" 
-              element={
-                <PlaceholderPage 
-                  title="Financial Analysis" 
-                  description="Generate detailed quotes with financing, leasing, and PPA options"
-                  icon={Calculator}
-                />
-              } 
-            />
-            <Route 
-              path="/reports" 
-              element={
-                <PlaceholderPage 
-                  title="Reports & Analytics" 
-                  description="Interactive dashboards for performance, financials, and compliance status"
-                  icon={TrendingUp}
-                />
-              } 
-            />
+            <Route path="/energy" element={<EnergyAnalysis />} />
+            <Route path="/financial" element={<FinancialAnalysis />} />
+            <Route path="/reports" element={<ReportsAnalytics />} />
             
             {/* Operations Routes */}
-            <Route 
-              path="/documents" 
-              element={
-                <PlaceholderPage 
-                  title="Document Management" 
-                  description="Upload, store, and annotate project files with digital signatures"
-                  icon={FileText}
-                />
-              } 
-            />
-            <Route 
-              path="/field" 
-              element={
-                <PlaceholderPage 
-                  title="Field Operations" 
-                  description="Mobile-first offline access with GPS tagging and progress tracking"
-                  icon={MapPin}
-                />
-              } 
-            />
-            <Route 
-              path="/notifications" 
-              element={
-                <PlaceholderPage 
-                  title="Notifications" 
-                  description="Automated reminders and real-time alerts for system monitoring"
-                  icon={Bell}
-                />
-              } 
-            />
+            <Route path="/documents" element={<DocumentManagement />} />
+            <Route path="/field" element={<FieldOperations />} />
+            <Route path="/notifications" element={<Notifications />} />
             
             {/* System Routes */}
-            <Route 
-              path="/compliance" 
-              element={
-                <PlaceholderPage 
-                  title="Safety & Compliance" 
-                  description="SANS electrical standards and SSEG procedures enforcement"
-                  icon={Shield}
-                />
-              } 
-            />
-            <Route 
-              path="/settings" 
-              element={
-                <PlaceholderPage 
-                  title="Settings" 
-                  description="Configure system preferences and integration settings"
-                  icon={Settings}
-                />
-              } 
-            />
+            <Route path="/compliance" element={<SafetyCompliance />} />
+            <Route path="/settings" element={<Settings />} />
             
             {/* Catch-all route */}
             <Route path="*" element={<NotFound />} />
