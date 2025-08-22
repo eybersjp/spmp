@@ -24,8 +24,7 @@ import {
   TrendingUp, 
   MapPin, 
   Bell, 
-  Shield, 
-  Settings as SettingsIcon 
+  Shield
 } from "lucide-react";
 
 const queryClient = new QueryClient();
