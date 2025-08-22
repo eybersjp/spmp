@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +19,7 @@ import {
 } from "lucide-react";
 
 export default function Projects() {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
   const projects = [
@@ -149,7 +151,7 @@ export default function Projects() {
         <TabsContent value="all" className="space-y-4">
           <div className="grid gap-4">
             {filteredProjects.map((project) => (
-              <Card key={project.id} className="border-0 shadow-elegant hover:shadow-energy transition-shadow">
+              <Card key={project.id} className="border-0 shadow-elegant hover:shadow-energy transition-shadow cursor-pointer" onClick={() => navigate(`/projects/${project.id}`)}>
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
