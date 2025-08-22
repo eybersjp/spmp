@@ -25,7 +25,7 @@ import {
   MapPin, 
   Bell, 
   Shield, 
-  Settings 
+  Settings as SettingsIcon 
 } from "lucide-react";
 
 const queryClient = new QueryClient();
