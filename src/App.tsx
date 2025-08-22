@@ -7,6 +7,7 @@ import { Layout } from "@/components/Layout";
 import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/Projects";
 import Clients from "./pages/Clients";
+import ClientDetail from "./pages/ClientDetail";
 import SystemDesigner from "./pages/SystemDesigner";
 import EnergyAnalysis from "./pages/EnergyAnalysis";
 import FinancialAnalysis from "./pages/FinancialAnalysis";
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="/" element={<Dashboard />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/clients" element={<Clients />} />
+            <Route path="/clients/:clientId" element={<ClientDetail />} />
             <Route path="/designer" element={<SystemDesigner />} />
             
             {/* Analysis Routes */}

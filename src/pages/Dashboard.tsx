@@ -131,11 +131,11 @@ export default function Dashboard() {
             Complete solar lifecycle management - from lead to grid connection
           </p>
           <div className="flex gap-4">
-            <Button variant="secondary" size="lg">
+            <Button variant="secondary" size="lg" onClick={() => window.location.href = '/projects'}>
               <Zap className="mr-2 h-5 w-5" />
               New Project
             </Button>
-            <Button variant="outline" size="lg" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10">
+            <Button variant="outline" size="lg" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10" onClick={() => window.location.href = '/designer'}>
               <Sun className="mr-2 h-5 w-5" />
               System Designer
             </Button>
@@ -245,7 +245,7 @@ export default function Dashboard() {
                 </div>
               ))}
             </div>
-            <Button variant="outline" className="w-full mt-4">
+            <Button variant="outline" className="w-full mt-4" onClick={() => window.location.href = '/notifications'}>
               View All Notifications
             </Button>
           </CardContent>

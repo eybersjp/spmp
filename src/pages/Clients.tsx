@@ -258,7 +258,7 @@ export default function Clients() {
               </div>
 
               <div className="pt-2">
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" className="w-full" onClick={() => window.location.href = `/clients/${client.id}`}>
                   View Details
                 </Button>
               </div>
