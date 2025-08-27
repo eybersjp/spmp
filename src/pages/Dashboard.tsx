@@ -1,6 +1,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Zap, 
   Sun, 
@@ -18,6 +20,8 @@ import {
 import heroImage from "@/assets/solar-dashboard-hero.jpg";
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const stats = [
     {
       title: "Active Projects",
@@ -131,11 +135,11 @@ export default function Dashboard() {
             Complete solar lifecycle management - from lead to grid connection
           </p>
           <div className="flex gap-4">
-            <Button variant="secondary" size="lg" onClick={() => window.location.href = '/projects'}>
+            <Button variant="secondary" size="lg" onClick={() => navigate('/projects')}>
               <Zap className="mr-2 h-5 w-5" />
               New Project
             </Button>
-            <Button variant="outline" size="lg" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10" onClick={() => window.location.href = '/designer'}>
+            <Button variant="outline" size="lg" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10" onClick={() => navigate('/designer')}>
               <Sun className="mr-2 h-5 w-5" />
               System Designer
             </Button>
@@ -183,7 +187,8 @@ export default function Dashboard() {
               {recentProjects.map((project) => (
                 <div
                   key={project.id}
-                  className="flex items-center justify-between rounded-lg border border-border/50 p-4 transition-colors hover:bg-muted/50"
+                  className="flex items-center justify-between rounded-lg border border-border/50 p-4 transition-colors hover:bg-muted/50 cursor-pointer"
+                  onClick={() => navigate(`/projects/${project.id}`)}
                 >
                   <div className="space-y-1">
                     <p className="font-medium">{project.name}</p>
@@ -245,7 +250,7 @@ export default function Dashboard() {
                 </div>
               ))}
             </div>
-            <Button variant="outline" className="w-full mt-4" onClick={() => window.location.href = '/notifications'}>
+            <Button variant="outline" className="w-full mt-4" onClick={() => navigate('/notifications')}>
               View All Notifications
             </Button>
           </CardContent>

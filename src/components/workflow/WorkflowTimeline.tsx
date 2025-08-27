@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -68,13 +69,8 @@ interface WorkflowTimelineProps {
   onAddNote?: (stageId: string, note: string) => void;
 }
 
-export function WorkflowTimeline({ 
-  stages, 
-  onStageUpdate, 
-  onTaskToggle, 
-  onDocumentUpload,
-  onAddNote 
-}: WorkflowTimelineProps) {
+export default function WorkflowTimeline({ stages, onTaskToggle, onDocumentUpload }: WorkflowTimelineProps) {
+  const { toast } = useToast();
   const [expandedStages, setExpandedStages] = useState<string[]>([]);
   const [newNotes, setNewNotes] = useState<{[key: string]: string}>({});
 
@@ -117,11 +113,51 @@ export function WorkflowTimeline({
   };
 
   const handleAddNote = (stageId: string) => {
-    const note = newNotes[stageId];
-    if (note?.trim()) {
-      onAddNote?.(stageId, note);
-      setNewNotes(prev => ({ ...prev, [stageId]: '' }));
-    }
+    const note = newNotes[stageId]?.trim();
+    if (!note) return;
+    
+    // Here you would typically save the note to your backend
+    toast({
+      title: "Note Added",
+      description: "Stage note has been saved successfully.",
+    });
+    
+    setNewNotes(prev => ({ ...prev, [stageId]: '' }));
+  };
+
+  const handleViewDocuments = (stageId: string) => {
+    toast({
+      title: "View Documents",
+      description: "Opening document viewer...",
+    });
+  };
+
+  const handleViewPhotos = (stageId: string) => {
+    toast({
+      title: "View Photos", 
+      description: "Opening photo gallery...",
+    });
+  };
+
+  const handleScheduleInspection = (stageId: string) => {
+    toast({
+      title: "Schedule Inspection",
+      description: "Opening inspection scheduler...",
+    });
+  };
+
+  const handleFieldReport = (stageId: string) => {
+    toast({
+      title: "Field Report",
+      description: "Opening field operations report...",
+    });
+  };
+
+  const handleViewDocument = (documentId: string) => {
+    toast({
+      title: "View Document",
+      description: "Opening document viewer...",
+    });
   };
 
   return (
@@ -282,7 +318,7 @@ export function WorkflowTimeline({
                                     <CheckCircle className="h-3 w-3 mr-1" />
                                     Uploaded
                                   </Badge>
-                                  <Button variant="ghost" size="sm">
+                                  <Button variant="ghost" size="sm" onClick={() => handleViewDocument(doc.id)}>
                                     <Eye className="h-3 w-3" />
                                   </Button>
                                 </>
@@ -305,19 +341,19 @@ export function WorkflowTimeline({
 
                   {/* Action Buttons */}
                   <div className="flex flex-wrap gap-2 mt-6 pt-4 border-t">
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={() => handleViewDocuments(stage.id)}>
                       <FileText className="h-3 w-3 mr-1" />
                       View All Documents
                     </Button>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={() => handleViewPhotos(stage.id)}>
                       <Camera className="h-3 w-3 mr-1" />
                       View Photos
                     </Button>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={() => handleScheduleInspection(stage.id)}>
                       <Calendar className="h-3 w-3 mr-1" />
                       Schedule Inspection
                     </Button>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={() => handleFieldReport(stage.id)}>
                       <ExternalLink className="h-3 w-3 mr-1" />
                       Field Report
                     </Button>

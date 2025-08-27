@@ -27,7 +27,7 @@ import {
   Settings,
   Upload
 } from "lucide-react";
-import { WorkflowTimeline } from "@/components/workflow/WorkflowTimeline";
+import WorkflowTimeline from "@/components/workflow/WorkflowTimeline";
 
 export default function ProjectDetail() {
   const { projectId } = useParams();

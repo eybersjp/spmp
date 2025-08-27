@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +19,8 @@ import {
 } from "lucide-react";
 
 export default function Clients() {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
 
   const clients = [
@@ -95,6 +99,13 @@ export default function Clients() {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
+  const handleAddClient = () => {
+    toast({
+      title: "Add Client",
+      description: "Opening new client form...",
+    });
+  };
+
   const filteredClients = clients.filter(client =>
     client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     client.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -111,7 +122,7 @@ export default function Clients() {
             Manage client relationships and project history
           </p>
         </div>
-        <Button className="bg-gradient-solar hover:opacity-90">
+        <Button className="bg-gradient-solar hover:opacity-90" onClick={handleAddClient}>
           <Plus className="mr-2 h-4 w-4" />
           Add Client
         </Button>
@@ -258,7 +269,14 @@ export default function Clients() {
               </div>
 
               <div className="pt-2">
-                <Button variant="outline" className="w-full" onClick={() => window.location.href = `/clients/${client.id}`}>
+                <Button 
+                  variant="outline" 
+                  className="w-full" 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/clients/${client.id}`);
+                  }}
+                >
                   View Details
                 </Button>
               </div>

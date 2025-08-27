@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +21,7 @@ import {
 
 export default function Projects() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
 
   const projects = [
@@ -95,6 +97,28 @@ export default function Projects() {
     }
   };
 
+  const handleNewProject = () => {
+    toast({
+      title: "New Project",
+      description: "Opening project creation wizard...",
+    });
+    navigate('/designer');
+  };
+
+  const handleFilters = () => {
+    toast({
+      title: "Filters",
+      description: "Filter options coming soon...",
+    });
+  };
+
+  const handleProjectAction = (projectId: string, action: string) => {
+    toast({
+      title: `Project ${action}`,
+      description: `${action} for project ${projectId}`,
+    });
+  };
+  
   const filteredProjects = projects.filter(project =>
     project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     project.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -111,7 +135,7 @@ export default function Projects() {
             Manage solar installations with SANS/SSEG compliance tracking
           </p>
         </div>
-        <Button className="bg-gradient-solar hover:opacity-90">
+        <Button className="bg-gradient-solar hover:opacity-90" onClick={handleNewProject}>
           <Plus className="mr-2 h-4 w-4" />
           New Project
         </Button>
@@ -130,7 +154,7 @@ export default function Projects() {
                 className="pl-9"
               />
             </div>
-            <Button variant="outline">
+            <Button variant="outline" onClick={handleFilters}>
               <Filter className="mr-2 h-4 w-4" />
               Filters
             </Button>
@@ -163,7 +187,7 @@ export default function Projects() {
                         <span className="ml-1">{project.status}</span>
                       </Badge>
                     </div>
-                    <Button variant="ghost" size="sm">
+                    <Button variant="ghost" size="sm" onClick={() => handleProjectAction(project.id, 'Options')}>
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>
                   </div>

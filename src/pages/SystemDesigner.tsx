@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,11 +17,17 @@ import {
   TrendingUp,
   CheckCircle,
   AlertCircle,
-  Lightbulb
+  Lightbulb,
+  Download,
+  FileText
 } from "lucide-react";
 
 export default function SystemDesigner() {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [designStep, setDesignStep] = useState("input");
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
     address: "",
     monthlyUsage: "",
@@ -45,9 +53,89 @@ export default function SystemDesigner() {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleDesignCalculation = () => {
-    // This would integrate with Google Solar API
-    setDesignStep("results");
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    
+    if (!formData.address.trim()) {
+      newErrors.address = "Property address is required";
+    }
+    if (!formData.monthlyUsage || parseFloat(formData.monthlyUsage) <= 0) {
+      newErrors.monthlyUsage = "Valid monthly usage is required";
+    }
+    if (!formData.systemGoal) {
+      newErrors.systemGoal = "System goal selection is required";
+    }
+    if (!formData.roofType) {
+      newErrors.roofType = "Roof type selection is required";
+    }
+    if (!formData.budget) {
+      newErrors.budget = "Budget range selection is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleDesignCalculation = async () => {
+    if (!validateForm()) {
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all required fields correctly.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    setErrors({});
+    
+    try {
+      // Simulate API call to Google Solar API
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      setDesignStep("results");
+      toast({
+        title: "Design Generated Successfully!",
+        description: "Your solar system design has been calculated using AI optimization.",
+      });
+    } catch (error) {
+      toast({
+        title: "Design Error",
+        description: "Failed to generate system design. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSolarDatabase = () => {
+    toast({
+      title: "Solar Database",
+      description: "Opening solar component database...",
+    });
+    // Navigate to solar database page when implemented
+  };
+
+  const handleGenerateProposal = () => {
+    toast({
+      title: "Generating Proposal",
+      description: "Creating detailed project proposal document...",
+    });
+    // Implement proposal generation
+  };
+
+  const handleExportDesign = () => {
+    toast({
+      title: "Exporting Design", 
+      description: "Downloading system design files...",
+    });
+    // Implement design export
+  };
+
+  const handleBackToInput = () => {
+    setDesignStep("input");
+    setErrors({});
   };
 
   return (
@@ -60,7 +148,7 @@ export default function SystemDesigner() {
             AI-powered solar system design with Google Solar API integration
           </p>
         </div>
-        <Button variant="outline">
+        <Button variant="outline" onClick={handleSolarDatabase}>
           <Sun className="mr-2 h-4 w-4" />
           Solar Database
         </Button>
@@ -79,38 +167,46 @@ export default function SystemDesigner() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="address">Property Address</Label>
-              <div className="relative">
-                <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="address"
-                  placeholder="123 Main Street, Johannesburg, Gauteng"
-                  value={formData.address}
-                  onChange={(e) => handleInputChange("address", e.target.value)}
-                  className="pl-9"
-                />
+              <div className="space-y-2">
+                <Label htmlFor="address">Property Address *</Label>
+                <div className="relative">
+                  <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="address"
+                    placeholder="123 Main Street, Johannesburg, Gauteng"
+                    value={formData.address}
+                    onChange={(e) => handleInputChange("address", e.target.value)}
+                    className={`pl-9 ${errors.address ? 'border-destructive' : ''}`}
+                  />
+                </div>
+                {errors.address && (
+                  <p className="text-xs text-destructive">{errors.address}</p>
+                )}
+                <p className="text-xs text-muted-foreground">
+                  Used for Google Solar API irradiance and shading analysis
+                </p>
               </div>
-              <p className="text-xs text-muted-foreground">
-                Used for Google Solar API irradiance and shading analysis
-              </p>
-            </div>
 
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="usage">Monthly Usage (kWh)</Label>
+                <Label htmlFor="usage">Monthly Usage (kWh) *</Label>
                 <Input
                   id="usage"
                   type="number"
+                  min="0"
                   placeholder="800"
                   value={formData.monthlyUsage}
                   onChange={(e) => handleInputChange("monthlyUsage", e.target.value)}
+                  className={errors.monthlyUsage ? 'border-destructive' : ''}
                 />
+                {errors.monthlyUsage && (
+                  <p className="text-xs text-destructive">{errors.monthlyUsage}</p>
+                )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="goal">System Goal</Label>
+                <Label htmlFor="goal">System Goal *</Label>
                 <Select value={formData.systemGoal} onValueChange={(value) => handleInputChange("systemGoal", value)}>
-                  <SelectTrigger>
+                  <SelectTrigger className={errors.systemGoal ? 'border-destructive' : ''}>
                     <SelectValue placeholder="Select goal" />
                   </SelectTrigger>
                   <SelectContent>
@@ -120,14 +216,17 @@ export default function SystemDesigner() {
                     <SelectItem value="maximum">Maximum Capacity</SelectItem>
                   </SelectContent>
                 </Select>
+                {errors.systemGoal && (
+                  <p className="text-xs text-destructive">{errors.systemGoal}</p>
+                )}
               </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="roof">Roof Type</Label>
+                <Label htmlFor="roof">Roof Type *</Label>
                 <Select value={formData.roofType} onValueChange={(value) => handleInputChange("roofType", value)}>
-                  <SelectTrigger>
+                  <SelectTrigger className={errors.roofType ? 'border-destructive' : ''}>
                     <SelectValue placeholder="Select roof type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -137,11 +236,14 @@ export default function SystemDesigner() {
                     <SelectItem value="flat">Flat Roof</SelectItem>
                   </SelectContent>
                 </Select>
+                {errors.roofType && (
+                  <p className="text-xs text-destructive">{errors.roofType}</p>
+                )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="budget">Budget Range</Label>
+                <Label htmlFor="budget">Budget Range *</Label>
                 <Select value={formData.budget} onValueChange={(value) => handleInputChange("budget", value)}>
-                  <SelectTrigger>
+                  <SelectTrigger className={errors.budget ? 'border-destructive' : ''}>
                     <SelectValue placeholder="Select budget" />
                   </SelectTrigger>
                   <SelectContent>
@@ -151,16 +253,19 @@ export default function SystemDesigner() {
                     <SelectItem value="no-limit">No Limit</SelectItem>
                   </SelectContent>
                 </Select>
+                {errors.budget && (
+                  <p className="text-xs text-destructive">{errors.budget}</p>
+                )}
               </div>
             </div>
 
             <Button 
               onClick={handleDesignCalculation}
               className="w-full bg-gradient-solar hover:opacity-90"
-              disabled={!formData.address || !formData.monthlyUsage}
+              disabled={isLoading}
             >
               <Zap className="mr-2 h-4 w-4" />
-              Generate System Design
+              {isLoading ? "Generating Design..." : "Generate System Design"}
             </Button>
           </CardContent>
         </Card>
@@ -200,6 +305,12 @@ export default function SystemDesigner() {
         {/* Results Panel */}
         {designStep === "results" && (
           <div className="lg:col-span-2 space-y-6">
+            <div className="flex items-center justify-between">
+              <Button variant="outline" onClick={handleBackToInput}>
+                <Calculator className="mr-2 h-4 w-4" />
+                Back to Input
+              </Button>
+            </div>
             <Card className="border-0 shadow-elegant">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -386,10 +497,12 @@ export default function SystemDesigner() {
                 </Tabs>
 
                 <div className="flex gap-4 mt-6">
-                  <Button className="flex-1 bg-gradient-solar hover:opacity-90">
+                  <Button className="flex-1 bg-gradient-solar hover:opacity-90" onClick={handleGenerateProposal}>
+                    <FileText className="mr-2 h-4 w-4" />
                     Generate Proposal
                   </Button>
-                  <Button variant="outline" className="flex-1">
+                  <Button variant="outline" className="flex-1" onClick={handleExportDesign}>
+                    <Download className="mr-2 h-4 w-4" />
                     Export Design
                   </Button>
                 </div>

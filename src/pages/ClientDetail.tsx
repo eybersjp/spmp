@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +23,7 @@ import {
 export default function ClientDetail() {
   const { clientId } = useParams();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   // Mock client data - in real app this would come from API
   const client = {
@@ -115,6 +117,35 @@ export default function ClientDetail() {
     }
   };
 
+  const handleEditClient = () => {
+    toast({
+      title: "Edit Client",
+      description: "Opening client editor...",
+    });
+  };
+
+  const handleNewProject = () => {
+    toast({
+      title: "New Project", 
+      description: `Creating new project for ${client.name}...`,
+    });
+    navigate('/designer');
+  };
+
+  const handleNewMessage = () => {
+    toast({
+      title: "New Message",
+      description: `Opening message composer for ${client.name}...`,
+    });
+  };
+
+  const handleUploadDocument = () => {
+    toast({
+      title: "Upload Document",
+      description: "Document upload coming soon...",
+    });
+  };
+
   return (
     <div className="flex-1 space-y-6 p-6">
       {/* Header */}
@@ -146,7 +177,7 @@ export default function ClientDetail() {
             </div>
           </div>
         </div>
-        <Button className="bg-gradient-solar hover:opacity-90">
+        <Button className="bg-gradient-solar hover:opacity-90" onClick={handleEditClient}>
           <Edit className="mr-2 h-4 w-4" />
           Edit Client
         </Button>
@@ -217,15 +248,15 @@ export default function ClientDetail() {
         <TabsContent value="projects" className="space-y-4">
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold">Client Projects</h3>
-            <Button className="bg-gradient-solar hover:opacity-90">
+            <Button className="bg-gradient-solar hover:opacity-90" onClick={handleNewProject}>
               <FolderKanban className="mr-2 h-4 w-4" />
               New Project
             </Button>
           </div>
           <div className="space-y-4">
             {projects.map((project) => (
-              <Card key={project.id} className="border-0 shadow-elegant">
-                <CardContent className="p-6">
+                <Card key={project.id} className="border-0 shadow-elegant cursor-pointer hover:shadow-energy transition-shadow" onClick={() => navigate(`/projects/${project.id}`)}>
+                  <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
                       <Badge variant="outline" className="text-xs font-mono">
@@ -272,7 +303,7 @@ export default function ClientDetail() {
         <TabsContent value="communications" className="space-y-4">
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold">Communication History</h3>
-            <Button variant="outline">
+            <Button variant="outline" onClick={handleNewMessage}>
               <Mail className="mr-2 h-4 w-4" />
               New Message
             </Button>
@@ -305,7 +336,7 @@ export default function ClientDetail() {
         <TabsContent value="documents" className="space-y-4">
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold">Client Documents</h3>
-            <Button variant="outline">
+            <Button variant="outline" onClick={handleUploadDocument}>
               <FileText className="mr-2 h-4 w-4" />
               Upload Document
             </Button>
