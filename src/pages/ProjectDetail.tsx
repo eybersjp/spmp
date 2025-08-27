@@ -27,6 +27,7 @@ import {
   Settings,
   Upload
 } from "lucide-react";
+import { WorkflowTimeline } from "@/components/workflow/WorkflowTimeline";
 
 export default function ProjectDetail() {
   const { projectId } = useParams();
@@ -95,14 +96,184 @@ export default function ProjectDetail() {
     }
   };
 
-  const timeline = [
-    { date: '2024-12-01', event: 'Project Started', status: 'completed' },
-    { date: '2024-12-05', event: 'Site Survey Completed', status: 'completed' },
-    { date: '2024-12-10', event: 'Materials Delivered', status: 'completed' },
-    { date: '2024-12-15', event: 'Installation Begun', status: 'completed' },
-    { date: '2024-12-20', event: 'Electrical Work', status: 'current' },
-    { date: '2025-01-05', event: 'System Testing', status: 'pending' },
-    { date: '2025-01-15', event: 'Final Inspection', status: 'pending' }
+  const workflowStages = [
+    {
+      id: 'stage-1',
+      title: 'Project Initiation & Planning',
+      description: 'Initial project setup, site assessment, and planning documentation',
+      status: 'completed' as const,
+      progress: 100,
+      startDate: '2024-12-01',
+      endDate: '2024-12-05',
+      estimatedDuration: '5 days',
+      assignee: 'Project Manager',
+      notes: 'All initial assessments completed successfully. Client requirements documented.',
+      tasks: [
+        { id: 'task-1-1', title: 'Client requirements gathering', completed: true, assignee: 'Project Manager' },
+        { id: 'task-1-2', title: 'Site feasibility assessment', completed: true, assignee: 'Technical Lead' },
+        { id: 'task-1-3', title: 'Initial cost estimation', completed: true, assignee: 'Financial Analyst' },
+        { id: 'task-1-4', title: 'Project timeline creation', completed: true, assignee: 'Project Manager' }
+      ],
+      documents: [
+        { id: 'doc-1-1', name: 'Site Assessment Report', type: 'PDF', required: true, uploaded: true, uploadDate: '2024-12-03', size: '2.1 MB' },
+        { id: 'doc-1-2', name: 'Client Requirements', type: 'DOC', required: true, uploaded: true, uploadDate: '2024-12-02', size: '856 KB' },
+        { id: 'doc-1-3', name: 'Project Proposal', type: 'PDF', required: true, uploaded: true, uploadDate: '2024-12-04', size: '1.8 MB' }
+      ]
+    },
+    {
+      id: 'stage-2',
+      title: 'Design & Engineering',
+      description: 'System design, engineering calculations, and technical specifications',
+      status: 'completed' as const,
+      progress: 100,
+      startDate: '2024-12-06',
+      endDate: '2024-12-12',
+      estimatedDuration: '7 days',
+      assignee: 'Engineering Team',
+      notes: 'Design optimized for maximum efficiency. All engineering calculations verified.',
+      tasks: [
+        { id: 'task-2-1', title: 'Electrical system design', completed: true, assignee: 'Electrical Engineer' },
+        { id: 'task-2-2', title: 'Structural calculations', completed: true, assignee: 'Structural Engineer' },
+        { id: 'task-2-3', title: 'Component specifications', completed: true, assignee: 'Technical Specialist' },
+        { id: 'task-2-4', title: 'Design review & approval', completed: true, assignee: 'Senior Engineer' }
+      ],
+      documents: [
+        { id: 'doc-2-1', name: 'Electrical Schematic', type: 'DWG', required: true, uploaded: true, uploadDate: '2024-12-10', size: '3.2 MB' },
+        { id: 'doc-2-2', name: 'Structural Analysis', type: 'PDF', required: true, uploaded: true, uploadDate: '2024-12-11', size: '4.1 MB' },
+        { id: 'doc-2-3', name: 'Component Datasheet', type: 'PDF', required: true, uploaded: true, uploadDate: '2024-12-12', size: '12.5 MB' }
+      ]
+    },
+    {
+      id: 'stage-3',
+      title: 'Permits & Approvals',
+      description: 'Regulatory permits, municipal approvals, and compliance documentation',
+      status: 'completed' as const,
+      progress: 100,
+      startDate: '2024-12-13',
+      endDate: '2024-12-20',
+      estimatedDuration: '8 days',
+      assignee: 'Compliance Officer',
+      notes: 'All permits obtained ahead of schedule. SSEG application approved.',
+      tasks: [
+        { id: 'task-3-1', title: 'Building plan submission', completed: true, assignee: 'Compliance Officer' },
+        { id: 'task-3-2', title: 'SSEG application', completed: true, assignee: 'Technical Specialist' },
+        { id: 'task-3-3', title: 'Environmental clearance', completed: true, assignee: 'Environmental Consultant' },
+        { id: 'task-3-4', title: 'Municipal approval', completed: true, assignee: 'Compliance Officer' }
+      ],
+      documents: [
+        { id: 'doc-3-1', name: 'Building Plan Approval', type: 'PDF', required: true, uploaded: true, uploadDate: '2024-12-18', size: '2.8 MB' },
+        { id: 'doc-3-2', name: 'SSEG Certificate', type: 'PDF', required: true, uploaded: true, uploadDate: '2024-12-19', size: '1.5 MB' },
+        { id: 'doc-3-3', name: 'Environmental Clearance', type: 'PDF', required: true, uploaded: true, uploadDate: '2024-12-17', size: '3.7 MB' }
+      ]
+    },
+    {
+      id: 'stage-4',
+      title: 'Material Procurement',
+      description: 'Equipment ordering, delivery coordination, and inventory management',
+      status: 'completed' as const,
+      progress: 100,
+      startDate: '2024-12-15',
+      endDate: '2024-12-22',
+      estimatedDuration: '8 days',
+      assignee: 'Procurement Team',
+      notes: 'All materials delivered on schedule. Quality inspection completed.',
+      tasks: [
+        { id: 'task-4-1', title: 'Solar panel procurement', completed: true, assignee: 'Procurement Manager' },
+        { id: 'task-4-2', title: 'Inverter and electrical components', completed: true, assignee: 'Technical Buyer' },
+        { id: 'task-4-3', title: 'Mounting system delivery', completed: true, assignee: 'Logistics Coordinator' },
+        { id: 'task-4-4', title: 'Material quality inspection', completed: true, assignee: 'Quality Inspector' }
+      ],
+      documents: [
+        { id: 'doc-4-1', name: 'Material Delivery Receipt', type: 'PDF', required: true, uploaded: true, uploadDate: '2024-12-22', size: '1.2 MB' },
+        { id: 'doc-4-2', name: 'Quality Inspection Report', type: 'PDF', required: true, uploaded: true, uploadDate: '2024-12-22', size: '2.4 MB' },
+        { id: 'doc-4-3', name: 'Warranty Certificates', type: 'PDF', required: true, uploaded: true, uploadDate: '2024-12-21', size: '5.8 MB' }
+      ]
+    },
+    {
+      id: 'stage-5',
+      title: 'Installation & Mounting',
+      description: 'Physical installation of solar panels, mounting systems, and primary components',
+      status: 'in-progress' as const,
+      progress: 75,
+      startDate: '2024-12-23',
+      estimatedDuration: '10 days',
+      assignee: 'Installation Team',
+      notes: 'Installation proceeding smoothly. Weather conditions favorable.',
+      tasks: [
+        { id: 'task-5-1', title: 'Mounting system installation', completed: true, assignee: 'Installation Foreman' },
+        { id: 'task-5-2', title: 'Solar panel mounting', completed: true, assignee: 'Solar Technicians' },
+        { id: 'task-5-3', title: 'DC wiring installation', completed: true, assignee: 'Electrical Technician' },
+        { id: 'task-5-4', title: 'Inverter installation', completed: false, assignee: 'Electrical Specialist', dueDate: '2024-12-28' },
+        { id: 'task-5-5', title: 'Grounding system', completed: false, assignee: 'Electrical Technician', dueDate: '2024-12-29' }
+      ],
+      documents: [
+        { id: 'doc-5-1', name: 'Installation Progress Photos', type: 'ZIP', required: true, uploaded: true, uploadDate: '2024-12-26', size: '15.3 MB' },
+        { id: 'doc-5-2', name: 'Daily Installation Reports', type: 'PDF', required: true, uploaded: true, uploadDate: '2024-12-26', size: '3.8 MB' },
+        { id: 'doc-5-3', name: 'Safety Compliance Checklist', type: 'PDF', required: true, uploaded: false }
+      ]
+    },
+    {
+      id: 'stage-6',
+      title: 'Electrical Integration',
+      description: 'AC wiring, grid connection, monitoring system setup, and electrical testing',
+      status: 'in-progress' as const,
+      progress: 40,
+      startDate: '2024-12-28',
+      estimatedDuration: '5 days',
+      assignee: 'Electrical Team',
+      tasks: [
+        { id: 'task-6-1', title: 'AC wiring installation', completed: true, assignee: 'Electrical Technician' },
+        { id: 'task-6-2', title: 'Monitoring system setup', completed: false, assignee: 'System Technician', dueDate: '2024-12-30' },
+        { id: 'task-6-3', title: 'Grid connection preparation', completed: false, assignee: 'Electrical Engineer', dueDate: '2025-01-02' },
+        { id: 'task-6-4', title: 'Electrical safety testing', completed: false, assignee: 'Certified Electrician', dueDate: '2025-01-03' }
+      ],
+      documents: [
+        { id: 'doc-6-1', name: 'Electrical Installation Certificate', type: 'PDF', required: true, uploaded: false },
+        { id: 'doc-6-2', name: 'Grid Connection Application', type: 'PDF', required: true, uploaded: false },
+        { id: 'doc-6-3', name: 'System Monitoring Setup', type: 'PDF', required: true, uploaded: false }
+      ]
+    },
+    {
+      id: 'stage-7',
+      title: 'System Testing & Commissioning',
+      description: 'Performance testing, system optimization, and commissioning procedures',
+      status: 'not-started' as const,
+      progress: 0,
+      estimatedDuration: '3 days',
+      assignee: 'Commissioning Engineer',
+      tasks: [
+        { id: 'task-7-1', title: 'System performance testing', completed: false, assignee: 'Test Engineer', dueDate: '2025-01-05' },
+        { id: 'task-7-2', title: 'Energy production verification', completed: false, assignee: 'Performance Analyst', dueDate: '2025-01-06' },
+        { id: 'task-7-3', title: 'System optimization', completed: false, assignee: 'Technical Specialist', dueDate: '2025-01-07' },
+        { id: 'task-7-4', title: 'Commissioning documentation', completed: false, assignee: 'Documentation Specialist', dueDate: '2025-01-07' }
+      ],
+      documents: [
+        { id: 'doc-7-1', name: 'Performance Test Results', type: 'PDF', required: true, uploaded: false },
+        { id: 'doc-7-2', name: 'Commissioning Report', type: 'PDF', required: true, uploaded: false },
+        { id: 'doc-7-3', name: 'System Optimization Settings', type: 'PDF', required: true, uploaded: false }
+      ]
+    },
+    {
+      id: 'stage-8',
+      title: 'Final Inspection & Handover',
+      description: 'Official inspections, final approvals, and project handover to client',
+      status: 'not-started' as const,
+      progress: 0,
+      estimatedDuration: '5 days',
+      assignee: 'Project Manager',
+      tasks: [
+        { id: 'task-8-1', title: 'Municipal final inspection', completed: false, assignee: 'Compliance Officer', dueDate: '2025-01-10' },
+        { id: 'task-8-2', title: 'Client training session', completed: false, assignee: 'Technical Trainer', dueDate: '2025-01-12' },
+        { id: 'task-8-3', title: 'Warranty documentation', completed: false, assignee: 'Documentation Specialist', dueDate: '2025-01-13' },
+        { id: 'task-8-4', title: 'Project handover', completed: false, assignee: 'Project Manager', dueDate: '2025-01-15' }
+      ],
+      documents: [
+        { id: 'doc-8-1', name: 'Final Inspection Certificate', type: 'PDF', required: true, uploaded: false },
+        { id: 'doc-8-2', name: 'Client Training Materials', type: 'PDF', required: true, uploaded: false },
+        { id: 'doc-8-3', name: 'Warranty Documentation', type: 'PDF', required: true, uploaded: false },
+        { id: 'doc-8-4', name: 'Project Handover Certificate', type: 'PDF', required: true, uploaded: false }
+      ]
+    }
   ];
 
   const documents = [
@@ -125,6 +296,26 @@ export default function ProjectDetail() {
   const handleCancel = () => {
     setEditData({});
     setEditMode(false);
+  };
+
+  const handleStageUpdate = (stageId: string, updates: any) => {
+    console.log('Updating stage:', stageId, updates);
+    // In real app, update via API
+  };
+
+  const handleTaskToggle = (stageId: string, taskId: string) => {
+    console.log('Toggling task:', stageId, taskId);
+    // In real app, update task status via API
+  };
+
+  const handleDocumentUpload = (stageId: string, documentId: string) => {
+    console.log('Uploading document:', stageId, documentId);
+    // In real app, handle file upload
+  };
+
+  const handleAddNote = (stageId: string, note: string) => {
+    console.log('Adding note to stage:', stageId, note);
+    // In real app, save note via API
   };
 
   return (
@@ -346,31 +537,25 @@ export default function ProjectDetail() {
         </TabsContent>
 
         <TabsContent value="timeline" className="space-y-4">
-          <Card className="border-0 shadow-elegant">
-            <CardHeader>
-              <CardTitle>Project Timeline</CardTitle>
-              <CardDescription>Track project milestones and progress</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {timeline.map((item, index) => (
-                  <div key={index} className="flex items-center gap-4">
-                    <div className="flex-shrink-0">
-                      {item.status === 'completed' && <CheckCircle className="h-5 w-5 text-success" />}
-                      {item.status === 'current' && <Clock className="h-5 w-5 text-primary" />}
-                      {item.status === 'pending' && <Clock className="h-5 w-5 text-muted-foreground" />}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex justify-between items-center">
-                        <h4 className="font-medium">{item.event}</h4>
-                        <span className="text-sm text-muted-foreground">{item.date}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-lg font-semibold">Project Workflow</h3>
+              <Badge variant="outline" className="text-sm">
+                {workflowStages.filter(s => s.status === 'completed').length} of {workflowStages.length} stages completed
+              </Badge>
+            </div>
+            <p className="text-muted-foreground text-sm">
+              Comprehensive workflow tracking with tasks, documents, and actionable components for each project stage.
+            </p>
+          </div>
+          
+          <WorkflowTimeline 
+            stages={workflowStages}
+            onStageUpdate={handleStageUpdate}
+            onTaskToggle={handleTaskToggle}
+            onDocumentUpload={handleDocumentUpload}
+            onAddNote={handleAddNote}
+          />
         </TabsContent>
 
         <TabsContent value="documents" className="space-y-4">
